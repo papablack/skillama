@@ -5,10 +5,12 @@ const claude = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY
 });
 
-async function promptAI(fullPrompt){
+async function promptAI(prompt){
+  const fullPrompt = `Return only CODE. Write code based on this request: ${prompt}\n\nProvide ONLY the code without any explanations or markdown formatting. Never use "\`\`\`" symbols.`;
+
   const model = 'claude-3-sonnet-20240229';
   const max_tokens = 4096;
-  const temperature = 0.7;
+  const temperature = 0.8;
   
   const response = await claude.messages.create({
         model: model,

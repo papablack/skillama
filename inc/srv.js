@@ -36,15 +36,14 @@ const express = require('express');
         fs.mkdirSync(outputDir, { recursive: true });
       }
 
-      const fullPrompt = `Write code based on this request: ${prompt}\n\nProvide ONLY the code without any explanations or markdown formatting.`;
 
-      const generatedCode = await promptAI(fullPrompt);      
-      const filePath = path.join(outputDir, filename);
-
-      console.log({generatedCode, filePath});
+      console.log('Processing code request...');
+      const generatedCode = await promptAI(prompt);      
+      const filePath = path.join(outputDir, filename);      
 
       // Save the generated code to file
       fs.writeFileSync(filePath, generatedCode);
+      console.log('Code generated');
 
       res.json({
         message: 'Code generated and saved successfully',
@@ -59,6 +58,75 @@ const express = require('express');
       res.status(500).json({ 
         error: 'Internal server error', 
         details: error.message 
+      });
+    }
+  });
+
+  // List generated files endpoint
+  app.get('/api/list-files', (req, res) => {
+    try {
+      if (!fs.existsSync(outputDir)) {
+        return res.json({ files: [] });
+      }
+
+      const files = fs.readdirSync(outputDir)
+        .map(filename => {
+          const filePath = path.join(outputDir, filename);
+          const stats = fs.statSync(filePath);
+          return {
+            name: filename,
+            path: filePath,
+            size: stats.size,
+            created: stats.birthtime,
+            modified: stats.mtime
+          };
+        });
+
+      res.json({ files });
+    } catch (error) {
+      console.error('Error listing files:', error);
+      res.status(500).json({
+        error: 'Internal server error',
+        details: error.message
+      });
+    }
+  });
+
+   // Show file contents endpoint
+   app.post('/api/show-file', (req, res) => {
+    try {
+      const filename = req.body.filename;
+      const directory = outputDir;
+      const filePath = path.join(directory, filename);
+
+      // Check if file exists
+      if (!fs.existsSync(filePath)) {
+        return res.status(404).json({
+          error: 'File not found',
+          details: `File ${filename} does not exist in ${directory}`
+        });
+      }
+
+      // Get file stats
+      const stats = fs.statSync(filePath);
+      
+      // Read file contents
+      const content = fs.readFileSync(filePath, 'utf8');
+
+      res.json({
+        filename,
+        path: filePath,
+        content,
+        size: stats.size,
+        created: stats.birthtime,
+        modified: stats.mtime
+      });
+
+    } catch (error) {
+      console.error('Error reading file:', error);
+      res.status(500).json({
+        error: 'Internal server error',
+        details: error.message
       });
     }
   });
