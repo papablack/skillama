@@ -3,7 +3,7 @@ const localtunnel = require('localtunnel');
 async function tunneling(port){
     const tunnel = await localtunnel({ 
       port: port,
-      subdomain: 'antired-api'
+      subdomain: process.env.TUNNELER_NAME
     });
 
     console.log(`🌍 Tunnel URL: ${tunnel.url}`);

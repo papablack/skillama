@@ -1,0 +1,23 @@
+{
+  "name": "skillsrv",
+  "version": "1.0.0",
+  "description": "AI Code Generation Server with Anthropic Claude",
+  "main": "skillsrv.js",
+  "scripts": {
+    "start": "node skillsrv.js",
+    "dev": "nodemon skillsrv.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.18.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.3",
+    "localtunnel": "^2.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
