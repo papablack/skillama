@@ -1,18 +1,17 @@
 const express = require('express');
   const cors = require('cors');
-  const { Anthropic } = require('@anthropic-ai/sdk');
   const fs = require('fs');
   const path = require('path');
-  const localtunnel = require('localtunnel');
-
+  const { promptAI } = require('./ai');
 
  function setupSrv(){
-   
+  const outputDir = process.env.OUTPUT_DIR; 
   const app = express();
   // Middleware
   app.use(cors());
   app.use(express.json());
   
+
   // Health check endpoint
   app.get('/health', (req, res) => {
     res.status(200).json({ status: 'OK', message: 'Server is running' });
@@ -24,7 +23,6 @@ const express = require('express');
       const { 
         prompt,
         filename,
-        outputDir = './generated'
       } = req.body;
 
       if (!prompt || !filename) {
@@ -40,9 +38,10 @@ const express = require('express');
 
       const fullPrompt = `Write code based on this request: ${prompt}\n\nProvide ONLY the code without any explanations or markdown formatting.`;
 
-      const generatedCode = await promptAI(fullPrompt);
-      
+      const generatedCode = await promptAI(fullPrompt);      
       const filePath = path.join(outputDir, filename);
+
+      console.log({generatedCode, filePath});
 
       // Save the generated code to file
       fs.writeFileSync(filePath, generatedCode);
@@ -50,8 +49,7 @@ const express = require('express');
       res.json({
         message: 'Code generated and saved successfully',
         filePath: filePath,
-        code: generatedCode,
-        usage: response.usage
+        code: generatedCode,        
       });
       
       
