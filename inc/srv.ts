@@ -2,6 +2,7 @@ import express, { Express, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import { generateCodeSkill } from '../skills/generateCode'
 import { traverseFilesSkill } from '../skills/traverseFiles'
+import { gitOperationsSkill } from '../skills/gitOperations'
 import { generateOpenApiDocs } from '../inc/jsonGenerate'
 
 export function setupSrv(): Express {
@@ -29,6 +30,7 @@ export function setupSrv(): Express {
   
   generateCodeSkill(app);
   traverseFilesSkill(app);
+  gitOperationsSkill(app);
 
   // Error handling middleware
   app.use((err: Error, req: Request, res: Response, _next: NextFunction) => {

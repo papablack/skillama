@@ -2,227 +2,143 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Skillama API",
-    "description": "AI Code Generation Server with Anthropic Claude",
+    "description": "AI Code Generation Server with Anthropic Claude 3",
     "version": "1.0.0"
   },
   "servers": [
     {
-      "url": "https://antired-api.loca.lt",
-      "description": "Tunnel Server"
+      "url": "{tunnelUrl}",
+      "variables": {
+        "tunnelUrl": {
+          "default": "https://antired-api.loca.lt"
+        }
+      }
     }
   ],
   "paths": {
     "/health": {
       "get": {
+        "operationId": "getHealthCheck",
         "summary": "Health Check",
-        "description": "Check if the server is running",
         "responses": {
           "200": {
-            "description": "Server status",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "OK"
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Server is running"
-                    }
-                  }
-                }
-              }
-            }
+            "description": "Server status"
           }
         }
       }
     },
     "/api/generate-code": {
       "post": {
+        "operationId": "generateCode",
         "summary": "Generate Code",
-        "description": "Generate code using AI and save it to a file",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
+                "required": [
+                  "projectName",
+                  "prompt",
+                  "filename"
+                ],
                 "properties": {
                   "projectName": {
                     "type": "string",
-                    "description": "Project name (lowercase, no spaces)",
-                    "pattern": "^[a-z0-9-_]+$",
-                    "example": "my-project"
+                    "pattern": "^[a-z0-9-_]+$"
                   },
                   "prompt": {
-                      "type": "string",
-                    "description": "The prompt for code generation"
-                    },
+                    "type": "string"
+                  },
                   "filename": {
-                    "type": "string",
-                    "description": "Name of the file to save the generated code"
-                    }
-                },
-                "required": ["projectName", "prompt", "filename"]
-                }
-              }
-            }
-          },
-        "responses": {
-          "200": {
-            "description": "Successfully generated code",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                            "type": "string",
-                      "example": "Code generated and saved successfully"
-                          },
-                    "filePath": {
-                      "type": "string"
-                    },
-                    "code": {
-                      "type": "string"
-                    }
+                    "type": "string"
                   }
                 }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                    "error": {
-                    "type": "string",
-                      "example": "Project name, prompt and filename are required. Project name must be lowercase without spaces."
-                  }
               }
             }
           }
-            }
         },
-          "500": {
-            "description": "Internal server error"
+        "responses": {
+          "200": {
+            "description": "Successfully generated code"
+          },
+          "400": {
+            "description": "Bad request"
           }
         }
       }
-                    },
+    },
     "/api/list-files": {
       "get": {
+        "operationId": "listGeneratedFiles",
         "summary": "List Generated Files",
-        "description": "List all generated code files",
         "responses": {
           "200": {
-            "description": "List of files",
-                    "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "files": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "name": {
-                            "type": "string"
-                          },
-                          "path": {
-                            "type": "string"
-                          },
-                          "size": {
-                            "type": "number"
-                          },
-                          "created": {
-                            "type": "string",
-                            "format": "date-time"
-                          },
-                          "modified": {
-                            "type": "string",
-                            "format": "date-time"
-            }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error"
+            "description": "List of files"
           }
         }
       }
     },
     "/api/show-file": {
       "post": {
+        "operationId": "getFileContents",
         "summary": "Show File Contents",
-        "description": "Get the contents and details of a specific file",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
+                "required": [
+                  "filename"
+                ],
                 "properties": {
                   "filename": {
-                    "type": "string",
-                    "description": "Name of the file to read"
-  }
-                },
-                "required": ["filename"]
-}
+                    "type": "string"
+                  }
+                }
+              }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "File contents and details",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "filename": {
-                      "type": "string"
-                    },
-                    "path": {
-                      "type": "string"
-                    },
-                    "content": {
-                      "type": "string"
-                    },
-                    "size": {
-                      "type": "number"
-                    },
-                    "created": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "modified": {
-                      "type": "string",
-                      "format": "date-time"
-                    }
+            "description": "File contents"
+          },
+          "404": {
+            "description": "File not found"
+          }
+        }
+      }
+    },
+    "/api/git-sync": {
+      "post": {
+        "operationId": "syncGitChanges",
+        "summary": "Git Sync",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "message"
+                ],
+                "properties": {
+                  "message": {
+                    "type": "string"
                   }
                 }
               }
             }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully synced changes"
           },
-          "404": {
-            "description": "File not found"
-          },
-          "500": {
-            "description": "Internal server error"
+          "400": {
+            "description": "Bad request"
           }
         }
       }
