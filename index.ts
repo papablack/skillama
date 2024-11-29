@@ -16,7 +16,7 @@ const startServer = async (): Promise<void> => {
     });
 
     // Create tunnel with fixed subdomain
-    const tunneler = await tunneling(port);
+    await tunneling(port);
   } catch (error) {
     console.error('🔥 Server startup error:', error);
     process.exit(1);

@@ -2,7 +2,8 @@ import { Request, Response, NextFunction } from 'express';
 
 export interface TunnelOptions {
   port: number;
-  subdomain?: string;
+  subdomain: string;
+  skip_tunnel_warning?: boolean
 }
 
 export interface TunnelInstance {

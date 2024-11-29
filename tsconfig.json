@@ -17,7 +17,7 @@
     }
   },
   "include": [
-    "skillsrv.ts",
+    "index.ts",
     "inc/**/*.ts",
     "types/**/*.ts"
   ],

@@ -56,7 +56,7 @@ export function traverseFilesSkill(app: Express) {
     const outputDir: string = process.env.OUTPUT_DIR || path.resolve(__dirname, '..', 'generated');
 
     // List generated files endpoint
-    app.get('/api/list-files', (req: any, res: any) => {
+    app.get('/api/list-files', (req: any, res: any) => {        
         try {
             if (!fs.existsSync(outputDir)) {
                 return res.json({ files: [], treeView: '' });
@@ -64,6 +64,7 @@ export function traverseFilesSkill(app: Express) {
 
             const fileTree = buildFileTree(outputDir);
             const treeView = generateTreeText(fileTree);
+            console.log(`Processed list request. Listed ${fileTree.length} files.`);
 
             res.json({ 
                 files: fileTree,
@@ -102,6 +103,7 @@ export function traverseFilesSkill(app: Express) {
                 created: stats.birthtime,
                 modified: stats.mtime
             };
+            console.log(`Processed file read request: ${filePath}`);
 
             res.json(response);
 
