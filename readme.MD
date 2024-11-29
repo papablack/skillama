@@ -38,7 +38,7 @@ bun install
 
 ### Android/Termux Installation
 
-Choose one of the following methods:
+Choose one of the following methods for installing dev ubuntu on proot-distro (linux distro android emulator):
 
 1. Using CURL:
 ```bash
@@ -50,6 +50,21 @@ or
 ```bash
 wget -qO- https://raw.githubusercontent.com/papablack/skillama/refs/heads/master/bin/termux_install.sh | bash
 ```
+
+**In your Termux instance **
+
+Type in 
+
+```bash
+ubuntu-run git clone git@github.com:papablack/skillama.git
+```
+
+The installer will create aliases in your Termux instance:
+
+- ubuntu: opens the dev ubuntu
+- ubuntu-run command: runs a command in the dev ubuntu
+
+The **Skillama** code will be in */home/termux/skillama*
 
 ## Configuration
 
@@ -64,12 +79,14 @@ OUTPUT_DIR=/path/to/output/directory
 
 ## Usage
 
-Development mode:
+From root skillama directory run:
+
+**Development mode**:
 ```bash
 bun run dev
 ```
 
-Production mode:
+**Production mode**:
 ```bash
 bun skillsrv.js
 ```
@@ -93,15 +110,8 @@ The server will start on port 3000 (default) and automatically create a tunnel w
 - Implements automatic tunnel creation with custom subdomain support
 - Express server with CORS support
 
-## Development
-
-For development, the project uses nodemon for auto-reloading:
-```
-npm run dev
-```
-
 ## Notes
-
+- Your example *.env* is in *.env.local*
 - Keep your ANTHROPIC_API_KEY secure and never commit it to version control
 - The generated code is saved in the directory specified by OUTPUT_DIR
 - The tunnel URL will be displayed in the console when the server starts
