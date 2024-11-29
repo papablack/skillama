@@ -37,15 +37,10 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "projectName",
-                  "prompt",
-                  "filename"
-                ],
+                "required": ["projectName", "prompt", "filename"],
                 "properties": {
                   "projectName": {
-                    "type": "string",
-                    "pattern": "^[a-z0-9-_]+$"
+                    "type": "string"
                   },
                   "prompt": {
                     "type": "string"
@@ -61,16 +56,13 @@
         "responses": {
           "200": {
             "description": "Successfully generated code"
-          },
-          "400": {
-            "description": "Bad request"
           }
         }
       }
     },
     "/api/list-files": {
       "get": {
-        "operationId": "listGeneratedFiles",
+        "operationId": "listGeneratedFiles", 
         "summary": "List Generated Files",
         "responses": {
           "200": {
@@ -82,16 +74,14 @@
     "/api/show-file": {
       "post": {
         "operationId": "getFileContents",
-        "summary": "Show File Contents",
+        "summary": "Show File Contents", 
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "filename"
-                ],
+                "required": ["filename"],
                 "properties": {
                   "filename": {
                     "type": "string"
@@ -104,9 +94,6 @@
         "responses": {
           "200": {
             "description": "File contents"
-          },
-          "404": {
-            "description": "File not found"
           }
         }
       }
@@ -114,16 +101,14 @@
     "/api/git-sync": {
       "post": {
         "operationId": "syncGitChanges",
-        "summary": "Git Sync",
+        "summary": "Git Sync - Create branch commit and push",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "message"
-                ],
+                "required": ["message"],
                 "properties": {
                   "message": {
                     "type": "string"
@@ -136,9 +121,6 @@
         "responses": {
           "200": {
             "description": "Successfully synced changes"
-          },
-          "400": {
-            "description": "Bad request"
           }
         }
       }
