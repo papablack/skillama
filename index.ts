@@ -1,13 +1,14 @@
+import dotenv from 'dotenv';
+import { Express } from 'express';
+import { tunneling } from './inc/tunnel';
+import { setupSrv } from './inc/srv';
 
-require('dotenv').config();
+dotenv.config();
 
-const { tunneling } = require('./inc/tunnel');
-const { setupSrv } = require('./inc/srv');
+const app: Express = setupSrv();
+const port: number = parseInt(process.env.SKILLAMA_PORT || '3000', 10);
 
-const app = setupSrv();
-const port = process.env.PORT || 3000;
-
-const startServer = async () => {
+const startServer = async (): Promise<void> => {
   try {
     // Start the express server
     app.listen(port, () => {
@@ -21,6 +22,5 @@ const startServer = async () => {
     process.exit(1);
   }
 };
-
 
 startServer();

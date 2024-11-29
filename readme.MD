@@ -68,7 +68,10 @@ The **Skillama** code will be in */home/termux/skillama*
 
 ## Configuration
 
-1. Create a .env file in the root directory with the following variables:
+1. Create a .env.local file in the root directory with the following variables:
+
+*You can use **.env** file for reference*
+
 ```
 ANTHROPIC_API_KEY=your_api_key_here
 TUNNELER_NAME=your-tunnel-name
@@ -83,12 +86,12 @@ From root skillama directory run:
 
 **Development mode**:
 ```bash
-bun run dev
+bun dev
 ```
 
 **Production mode**:
 ```bash
-bun skillsrv.js
+bun start
 ```
 
 The server will start on port 3000 (default) and automatically create a tunnel with your specified subdomain.
@@ -96,10 +99,10 @@ The server will start on port 3000 (default) and automatically create a tunnel w
 ## Project Structure
 
 - `/inc` - Core functionality modules
-  - `ai.js` - Anthropic Claude integration
-  - `srv.js` - Express server setup
-  - `tunnel.js` - Local tunnel configuration
-- `skillsrv.js` - Main application entry point
+  - `ai.ts` - Anthropic Claude integration
+  - `srv.ts` - Express server setup
+  - `tunnel.ts` - Local tunnel configuration
+- `index.ts` - Main application entry point
 - `generated/` - Directory for AI-generated code output
 
 ## Technical Details
@@ -111,7 +114,8 @@ The server will start on port 3000 (default) and automatically create a tunnel w
 - Express server with CORS support
 
 ## Notes
-- Your example *.env* is in *.env.local*
+- Your example *.env.local* is in *.env*
+- SKILLAMA_PORT env will set port for server.
 - Keep your ANTHROPIC_API_KEY secure and never commit it to version control
 - The generated code is saved in the directory specified by OUTPUT_DIR
 - The tunnel URL will be displayed in the console when the server starts

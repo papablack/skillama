@@ -2,10 +2,11 @@
   "name": "skillsrv",
   "version": "1.0.0",
   "description": "AI Code Generation Server with Anthropic Claude",
-  "main": "skillsrv.js",
-  "scripts": {
-    "start": "node skillsrv.js",
-    "dev": "nodemon skillsrv.js",
+  "main": "index.ts",
+  "scripts": {    
+    "transpile": "tsc",
+    "start": "bun index.ts",
+    "dev": "bun --watch index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
@@ -17,9 +18,16 @@
     "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.0"
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/localtunnel": "^2.0.4",
+    "nodemon": "^3.1.0",
+    "tsc-watch": "^6.0.0",
+    "typescript": "^5.0.0"
   },
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=18.0.0",
+    "bun": ">=1.0.0"
   }
 }
+
