@@ -31,7 +31,7 @@ EOL
 # First Ubuntu launch to create .bashrc
 echo -e "\n${GREEN}Configuring Ubuntu...${NC}"
 proot-distro login ubuntu --bind /data/data/com.termux/files/home:/home/termux -- bash -c 'echo "cd /home/termux" >> ~/.bashrc'
-
+proot-distro login ubuntu --bind /data/data/com.termux/files/home:/home/termux -- bash -c 'apt update -y && apt install -y nano htop wget curl net-tools nodejs && npm install -g yarn && curl -fsSL https://bun.sh/install | bash'
 # Load new .bashrc
 source ~/.bashrc
 
