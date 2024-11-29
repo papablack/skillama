@@ -32,3 +32,20 @@ export interface ShowFileResponse {
   created: Date;
   modified: Date;
 }
+
+// Add these new interfaces for GitHub functionality
+export interface GitHubCreateRepoResponse {
+  html_url: string;
+  clone_url: string;
+  ssh_url: string;
+  name: string;
+}
+
+export interface GitSyncRequest {
+  message: string;
+  projectName: string;
+  uuid: string;
+  createRepo?: boolean;
+  isPrivate?: boolean;
+  description?: string;
+}
