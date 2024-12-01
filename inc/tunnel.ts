@@ -1,6 +1,6 @@
 import localtunnel from 'localtunnel';
 import { TunnelOptions, TunnelInstance } from '../types';
-import uniqid from 'uniqid';
+import { v4 as uniqid } from 'uuid';
 
 export async function tunneling(port: number): Promise<TunnelInstance> {
     const options: TunnelOptions = { 
