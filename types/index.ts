@@ -44,7 +44,7 @@ export interface GitHubCreateRepoResponse {
 export interface GitSyncRequest {
   message: string;
   projectName: string;
-  uuid: string;
+  id: string;
   createRepo?: boolean;
   isPrivate?: boolean;
   description?: string;

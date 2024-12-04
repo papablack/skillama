@@ -1,56 +1,16 @@
-import fs from 'fs';
-import path from 'path';
-import { FileStats, ShowFileResponse } from '../types';
 import { Express } from 'express';
+import * as fs from 'fs';
+import * as path from 'path';
 
-interface FileNode extends FileStats {
+interface FileNode {
+    name: string;
     type: 'file' | 'directory';
     children?: FileNode[];
+    path: string;
 }
 
-function buildFileTree(dirPath: string): FileNode[] {
-    const items = fs.readdirSync(dirPath);
-    const tree: FileNode[] = [];
-
-    for (const item of items) {
-        const fullPath = path.join(dirPath, item);
-        const stats = fs.statSync(fullPath);
-        const node: FileNode = {
-            name: item,
-            path: fullPath,
-            size: stats.size,
-            created: stats.birthtime,
-            modified: stats.mtime,
-            type: stats.isDirectory() ? 'directory' : 'file'
-        };
-
-        if (stats.isDirectory()) {
-            node.children = buildFileTree(fullPath);
-        }
-
-        tree.push(node);
-    }
-
-    return tree;
-}
-
-function generateTreeText(nodes: FileNode[], prefix = ''): string {
-    let result = '';
-    
-    nodes.forEach((node, index) => {
-        const isLast = index === nodes.length - 1;
-        const marker = isLast ? '└── ' : '├── ';
-        const newPrefix = prefix + (isLast ? '    ' : '│   ');
-        
-        result += prefix + marker + node.name + '\n';
-        
-        if (node.type === 'directory' && node.children) {
-            result += generateTreeText(node.children, newPrefix);
-        }
-    });
-    
-    return result;
-}
+// Directories to ignore
+const IGNORED_DIRECTORIES = ['node_modules'];
 
 export function traverseFilesSkill(app: Express) {
     const outputDir: string = process.env.OUTPUT_DIR || path.resolve(__dirname, '..', 'generated');
@@ -62,13 +22,14 @@ export function traverseFilesSkill(app: Express) {
                 return res.json({ files: [], treeView: '' });
             }
 
-            const fileTree = buildFileTree(outputDir);
-            const treeView = generateTreeText(fileTree);
-            console.log(`Processed list request. Listed ${fileTree.length} files.`);
+            const fileTree = traverseDirectory(outputDir);
+            const treeView = generateTreeView(fileTree);
+            
+            console.log(`Processed list request. Found ${countFiles(fileTree)} items.`);
 
             res.json({ 
-                files: fileTree,
-                treeView 
+                files: flattenFileTree(fileTree),
+                treeView                
             });
         } catch (error) {
             console.error('Error listing files:', error);
@@ -78,41 +39,96 @@ export function traverseFilesSkill(app: Express) {
             });
         }
     });
+}
 
-    // Show file contents endpoint
-    app.post('/api/show-file', (req: any, res: any) => {
-        try {
-            const { filename } = req.body;
-            const filePath = path.join(outputDir, filename);
+function traverseDirectory(dirPath: string): FileNode {
+    const name = path.basename(dirPath);
+    const stats = fs.statSync(dirPath);
 
-            if (!fs.existsSync(filePath)) {
-                return res.status(404).json({
-                    error: 'File not found',
-                    details: `File ${filename} does not exist in ${outputDir}`
-                });
+    // Skip ignored directories
+    if (IGNORED_DIRECTORIES.includes(name)) {
+        return {
+            name,
+            type: 'directory',
+            path: dirPath,
+            children: []
+        };
+    }
+
+    if (stats.isFile()) {
+        return {
+            name,
+            type: 'file',
+            path: dirPath
+        };
+    }
+
+    const children = fs.readdirSync(dirPath)
+        .filter(child => !IGNORED_DIRECTORIES.includes(child)) // Filter out ignored directories
+        .map(child => traverseDirectory(path.join(dirPath, child)))
+        .sort((a, b) => {
+            // Directories first, then files, both in alphabetical order
+            if (a.type !== b.type) {
+                return a.type === 'directory' ? -1 : 1;
             }
+            return a.name.localeCompare(b.name);
+        });
 
-            const stats = fs.statSync(filePath);
-            const content = fs.readFileSync(filePath, 'utf8');
+    return {
+        name,
+        type: 'directory',
+        children,
+        path: dirPath
+    };
+}
 
-            const response: ShowFileResponse = {
-                filename,
-                path: filePath,
-                content,
-                size: stats.size,
-                created: stats.birthtime,
-                modified: stats.mtime
-            };
-            console.log(`Processed file read request: ${filePath}`);
+function generateTreeView(node: FileNode, prefix: string = ''): string {
+    // Skip empty directories (like node_modules)
+    if (node.type === 'directory' && (!node.children || node.children.length === 0)) {
+        return '';
+    }
 
-            res.json(response);
+    let result = prefix + '├── ' + node.name + '\n';
+    
+    if (node.type === 'directory' && node.children) {
+        const childPrefix = prefix + '│   ';
+        node.children.forEach((child, index) => {
+            if (index === node.children!.length - 1) {
+                const childTree = generateTreeView(child, '').trim();
+                if (childTree) {
+                    result += prefix + '└── ' + childTree + '\n';
+                }
+            } else {
+                result += generateTreeView(child, childPrefix);
+            }
+        });
+    }
+    
+    return result;
+}
 
-        } catch (error) {
-            console.error('Error reading file:', error);
-            res.status(500).json({
-                error: 'Internal server error',
-                details: error instanceof Error ? error.message : 'Unknown error'
-            });
-        }
-    });
+function flattenFileTree(node: FileNode): string[] {
+    if (node.type === 'file') {
+        return [node.path];
+    }
+
+    if (node.type === 'directory' && node.children) {
+        return node.children.reduce<string[]>((acc, child) => {
+            return [...acc, ...flattenFileTree(child)];
+        }, []);
+    }
+
+    return [];
+}
+
+function countFiles(node: FileNode): number {
+    if (node.type === 'file') {
+        return 1;
+    }
+
+    if (node.type === 'directory' && node.children) {
+        return node.children.reduce((sum, child) => sum + countFiles(child), 0);
+    }
+
+    return 0;
 }

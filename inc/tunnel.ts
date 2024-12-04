@@ -1,11 +1,11 @@
 import localtunnel from 'localtunnel';
 import { TunnelOptions, TunnelInstance } from '../types';
-import uniqid from 'uniqid';
+import {nanoid} from 'nanoid';
 
 export async function tunneling(port: number): Promise<TunnelInstance> {
     const options: TunnelOptions = { 
       port,
-      subdomain: process.env.TUNNELER_NAME || `skillama-${uniqid()}`,
+      subdomain: process.env.TUNNELER_NAME || `skillama-${nanoid()}`,
     };
 
     const tunnel = await localtunnel(options);
