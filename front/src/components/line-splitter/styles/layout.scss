@@ -1,0 +1,28 @@
+@import "../../../styles/includes.scss";
+@import "_tags";
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.spacer {
+  margin-right: 10px;
+}
+  
+
+.text-splitter-area {
+  &.loading {
+    p:last-child:after{
+      content: '';			
+      display: inline-block;
+      width: 5px;
+      height: 1rem;
+      height: 1.2rem;
+      background: rgb(114, 106, 106);
+      animation: 0.7s ease 0s infinite normal none running blink;
+      transform: translateY(5px);
+      margin-left: 5px;
+    }
+  }
+}

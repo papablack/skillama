@@ -1,0 +1,12 @@
+:root {
+  --primary_color: #c08d20;
+  --secondary_color: #e2e4ec;
+  --alt_color: #3f4042;
+}
+
+body {
+  background-color: var(--alt_color);
+  color: #FFF;
+  font-size: 17px;
+  margin: 0;
+}

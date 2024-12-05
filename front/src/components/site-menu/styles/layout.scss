@@ -1,0 +1,24 @@
+ @import "../../../styles/includes.scss";
+
+ @include default-styles();
+
+.site-menu {
+    ul{
+        li{
+            cursor: pointer;
+            
+            background-color: $alt_color;
+            color: $main_color;
+            padding: 0.5rem;
+            border: $main_color 1px solid;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+
+
+            &:hover {
+                background-color: $main_color;
+                color: $secondary_color
+            }
+        }
+    }
+}

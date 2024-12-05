@@ -1,0 +1,15 @@
+@import "@cwd/src/styles/includes.scss";
+
+@include default-styles();
+
+section{
+    background-color: $alt_color;
+    color: $secondary_color;
+    padding: 0.5rem;
+    border: $main_color 1px solid;
+    border-radius: 10px;
+
+    h1{
+        color: $main_color;
+    }
+}

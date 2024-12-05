@@ -1,0 +1,13 @@
+<div id="main-container" class="${ x => x.menuOpen ? 'open' : 'closed'}">
+    <aside>
+        <nav>
+            <site-menu></site-menu>
+        </nav>
+        <div class="user-controls">
+        </nav>
+    </aside>
+    <main>
+        <header>${x => x.currentPage}</header>
+        <rws-router :currentUrl="${ x => x.currentUrl}" />
+    </main>
+</div>

@@ -1,34 +1,25 @@
 {
-  "name": "skillsrv",
-  "version": "1.0.0",
+  "name": "skillama",
+  "version": "1.0.1",
   "description": "AI Code Generation Server with Anthropic Claude",
-  "main": "index.ts",
+  "main": "back/index.ts",
   "scripts": {
-    "transpile": "tsc",
-    "start": "bun index.ts",
-    "dev": "bun --watch index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "bun ./back/index.ts"
   },
-  "dependencies": {
-    "@anthropic-ai/sdk": "^0.18.0",
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
-    "express": "^4.18.3",
-    "localtunnel": "^2.0.2",
-    "swagger-ui-express": "^5.0.1",
-    "uniqid": "^5.4.0"
-  },
-  "devDependencies": {
-    "@types/cors": "^2.8.17",
-    "@types/express": "^5.0.0",
-    "@types/localtunnel": "^2.0.4",
-    "@types/uniqid": "^5.3.4",
-    "nodemon": "^3.1.0",
+  "devDependencies": {    
     "tsc-watch": "^6.0.0",
     "typescript": "^5.0.0"
   },
   "engines": {
     "node": ">=18.0.0",
     "bun": ">=1.0.0"
+  },
+  "workspaces": [
+    "front",
+    "back"
+  ],
+  "dependencies": {
+    "express": "^4.21.1",
+    "json-viewer": "^2.2.0"
   }
 }

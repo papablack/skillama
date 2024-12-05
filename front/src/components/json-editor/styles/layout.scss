@@ -1,0 +1,28 @@
+ @import "../../../styles/includes.scss";
+ @import "~/jsoneditor/dist/jsoneditor.min.css";
+
+ @include default-styles();
+
+ 
+ 
+ .json-editor{
+    margin-top: 15px;
+    height: 500px;
+    padding-bottom: 45px;
+
+    .copied-info {
+        color: $main_color;
+        font-weight: bold;
+        margin: 15px 0;
+    }
+
+    .copy-btn {
+        background-color: $main_color;
+        color: #FFF;
+        border-radius: 8px;
+        box-shadow: none;        
+        margin-bottom: 15px;
+        cursor: pointer;
+        padding: 5px;
+    }
+ }

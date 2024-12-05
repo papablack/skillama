@@ -1,0 +1,7 @@
+<div class="${x => x.menuClasses || 'site-menu'}">    
+    <ul>
+        ${T.repeat(x => x.links, T.html`
+            <li @click="${(x, c) => c.parent.handleClick(c.event, x)}">${x => x.label}</li>
+        `)}            
+    </ul>
+</div>

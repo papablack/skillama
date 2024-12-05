@@ -1,0 +1,7 @@
+<section>
+    <header><h1>Skillama OpenAPI</h1></header>
+        
+    <article>Here is a JSON that will help LLMs talk to skillama. Just paste it in schema textarea in your LLM / Bot / Agent setup page.</article>
+
+    ${T.when(x => x.configContents, T.html`<json-editor :json="${x => x.configContents}"></json-editor>`)}
+</section>

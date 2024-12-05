@@ -1,0 +1,5 @@
+<div class="json-editor">    
+    ${T.when(x => x.copied, T.html`<p class="copied-info">Copied to clipboard.</p>`)}
+    <button class="copy-btn" @click="${x => x.copy()}">Copy JSON</button>
+    <div ${T.ref('editorField')}></div>
+</div>
