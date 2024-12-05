@@ -2,6 +2,7 @@ import express, { Express, Request, Response, NextFunction } from 'express';
 import fs from 'fs';
 import path from 'path';
 import { promptAI } from '../inc/ai';
+const outputDir: string = path.resolve(process.cwd(), 'generated');
 
 export function generateCodeSkill(app: Express){
 
@@ -9,7 +10,6 @@ export function generateCodeSkill(app: Express){
   app.post('/api/generate-code', async (req: any, res: any) => {
     try {
       const { prompt, filename, projectName } = req.body;
-      const outputDir: string = path.resolve(process.env.OUTPUT_DIR || path.resolve(__dirname, '..' ,'generated'), projectName);
 
       if (!prompt || !filename) {
         return res.status(400).json({ 

@@ -7,12 +7,16 @@ interface FileNode extends FileStats {
     type: 'file' | 'directory';
     children?: FileNode[];
 }
+const outputDir: string = path.resolve(process.cwd(), 'generated');
 
 function buildFileTree(dirPath: string): FileNode[] {
     const items = fs.readdirSync(dirPath);
     const tree: FileNode[] = [];
 
     for (const item of items) {
+        if(item[0] === '.'){
+            continue;
+        }
         const fullPath = path.join(dirPath, item);
         const stats = fs.statSync(fullPath);
         const node: FileNode = {
@@ -53,8 +57,6 @@ function generateTreeText(nodes: FileNode[], prefix = ''): string {
 }
 
 export function traverseFilesSkill(app: Express) {
-    const outputDir: string = process.env.OUTPUT_DIR || path.resolve(__dirname, '..', 'generated');
-
     // List generated files endpoint
     app.get('/api/list-files', (req: any, res: any) => {        
         try {
@@ -82,9 +84,9 @@ export function traverseFilesSkill(app: Express) {
     // Show file contents endpoint
     app.post('/api/show-file', (req: any, res: any) => {
         try {
-            const { filename } = req.body;
-            const filePath = path.join(outputDir, filename);
-
+            const { filename, projectName } = req.body;
+            const filePath = path.join(outputDir, projectName, filename);
+            
             if (!fs.existsSync(filePath)) {
                 return res.status(404).json({
                     error: 'File not found',
