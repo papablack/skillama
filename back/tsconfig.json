@@ -17,9 +17,7 @@
     }
   },
   "include": [
-    "index.ts",
-    "inc/**/*.ts",
-    "types/**/*.ts"
+    "src/**/*.ts",
   ],
   "exclude": [
     "../node_modules",

@@ -3,9 +3,10 @@ import { Express } from 'express';
 import { tunneling } from './inc/tunnel';
 import { setupSrv } from './inc/srv';
 import path from 'path';
+import fs from 'fs';
 
 dotenv.config({
-  path: [path.resolve(__dirname, '..', '.env.local'), path.resolve(__dirname, '..', '.env')]
+  path: [path.resolve(process.cwd(), '.env.local'), path.resolve(process.cwd(), '.env')]
 });
 
 const app: Express = setupSrv();
@@ -25,5 +26,9 @@ const startServer = async (): Promise<void> => {
     process.exit(1);
   }
 };
+
+if(!fs.existsSync(path.resolve(process.cwd(), 'bun.lockb'))){
+  throw new Error('Run app from root directory.')
+}
 
 startServer();

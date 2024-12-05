@@ -4,7 +4,11 @@
   "description": "AI Code Generation Server with Anthropic Claude",
   "main": "back/index.ts",
   "scripts": {
-    "start": "bun ./back/index.ts"
+    "start": "bun ./back/src/index.ts",
+    "node:start": "node ./back/dist/skillama.js",
+    "back:transpile": "cd back && bun transpile",
+    "front:build": "cd front && bun build",
+    "front:watch": "cd front && bun watch"
   },
   "devDependencies": {    
     "tsc-watch": "^6.0.0",

@@ -1,0 +1,12 @@
+{
+  "components": [
+    "json-editor",
+    "line-splitter",
+    "site-menu",
+    "page-home",
+    "page-openapi",
+    "the-loader",
+    "rws-progress",
+    "rws-uploader"
+  ]
+}

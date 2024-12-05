@@ -28,7 +28,7 @@ export async function gitOperationsSkill(app: Express) {
 
       const outputDir: string = path.resolve(
         process.env.OUTPUT_DIR || 
-        path.resolve(__dirname, '..', 'generated'), 
+        path.resolve(process.cwd(), 'generated'), 
         projectName
       );
 

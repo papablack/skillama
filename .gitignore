@@ -1,7 +1,6 @@
 node_modules/
 .env.local
 generated/*
-dist/
 
 front/build
-front/public/js/*
+front/public/js/*.map

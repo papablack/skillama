@@ -107,7 +107,7 @@ export function traverseFilesSkill(app: Express) {
             };
             console.log(`Processed file read request: ${filePath}`);
 
-            res.json(response);
+            res.status(200).json(response);
 
         } catch (error) {
             console.error('Error reading file:', error);
