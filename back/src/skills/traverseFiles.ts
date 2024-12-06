@@ -7,9 +7,21 @@ interface FileNode extends FileStats {
     type: 'file' | 'directory';
     children?: FileNode[];
 }
+
 const outputDir: string = path.resolve(process.cwd(), 'generated');
 
-function buildFileTree(dirPath: string): FileNode[] {
+function buildFileTree(dirPath: string, visited = new Set<string>()): FileNode[] {
+    // Prevent infinite recursion by tracking visited paths
+    const normalizedPath = path.normalize(dirPath);
+    if (visited.has(normalizedPath)) {
+        return [];
+    }
+    visited.add(normalizedPath);
+
+    if (!fs.existsSync(dirPath)) {
+        return [];
+    }
+
     const items = fs.readdirSync(dirPath);
     const tree: FileNode[] = [];
 
@@ -18,21 +30,29 @@ function buildFileTree(dirPath: string): FileNode[] {
             continue;
         }
         const fullPath = path.join(dirPath, item);
-        const stats = fs.statSync(fullPath);
-        const node: FileNode = {
-            name: item,
-            path: fullPath,
-            size: stats.size,
-            created: stats.birthtime,
-            modified: stats.mtime,
-            type: stats.isDirectory() ? 'directory' : 'file'
-        };
+        
+        try {
+            const stats = fs.statSync(fullPath);
+            const node: FileNode = {
+                name: item,
+                path: fullPath,
+                size: stats.size,
+                created: stats.birthtime,
+                modified: stats.mtime,
+                type: stats.isDirectory() ? 'directory' : 'file'
+            };
 
-        if (stats.isDirectory()) {
-            node.children = buildFileTree(fullPath);
+            if (stats.isDirectory()) {
+                // Pass a copy of the visited set to prevent cross-branch pollution
+                node.children = buildFileTree(fullPath, new Set(visited));
+            }
+
+            tree.push(node);
+        } catch (error) {
+            console.error(`Error processing path ${fullPath}:`, error);
+            // Skip this item if there's an error
+            continue;
         }
-
-        tree.push(node);
     }
 
     return tree;

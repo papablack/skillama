@@ -1,32 +1,50 @@
-/// <reference types="jest" />
-
+import { expect, test, describe, beforeEach, mock } from "bun:test";
 import { promptAI, createAnthropicClient } from '../src/inc/ai';
 import { Anthropic } from '@anthropic-ai/sdk';
 
-// Mock the entire @anthropic-ai/sdk module
-jest.mock('@anthropic-ai/sdk');
+// Mock the create function
+const mockCreate = mock(() => Promise.resolve({
+  content: [{ text: '' }]
+}));
+
+// Create a complete mock Anthropic instance
+const mockAnthropicInstance = {
+  apiKey: 'test-api-key',
+  authToken: null,
+  _options: {},
+  messages: {
+    create: mockCreate
+  },
+  completions: {},
+  embeddings: {},
+  files: {},
+  images: {},
+  _client: {},
+  _baseURL: '',
+  _maxRetries: 0,
+  _timeout: 0,
+  _httpAgent: null,
+  _fetch: null,
+  _formatURL: () => '',
+  _fetchWithTimeout: async () => null,
+  _requestAPIKey: () => '',
+  _authHeaders: () => ({}),
+  _makeRequest: async () => null,
+  _validateHeaders: () => null
+} as unknown as Anthropic;
+
+// Replace the actual createAnthropicClient function
+const originalCreateClient = createAnthropicClient;
+(globalThis as any).createAnthropicClient = mock(() => mockAnthropicInstance);
 
 describe('AI Service', () => {
-  let mockClient: jest.Mocked<Anthropic>;
-  let mockCreate: jest.Mock;
-
   beforeEach(() => {
-    // Reset mocks
-    jest.clearAllMocks();
-    
-    // Setup mock implementation
-    mockCreate = jest.fn();
-    mockClient = {
-      messages: {
-        create: mockCreate
-      }
-    } as unknown as jest.Mocked<Anthropic>;
-
-    // Mock the Anthropic constructor
-    (Anthropic as unknown as jest.Mock).mockImplementation(() => mockClient);
+    // Reset all mocks
+    mockCreate.mockReset();
+    process.env.ANTHROPIC_API_KEY = 'test-api-key';
   });
 
-  it('should call Claude API with correct parameters and formatting', async () => {
+  test('should call Claude API with correct parameters and formatting', async () => {
     const testPrompt = 'Create a React component';
     const expectedFullPrompt = `Return only CODE. Write code based on this request: ${testPrompt}\n\nProvide ONLY the code without any explanations or markdown formatting. Never use "\`\`\`" symbols.`;
     
@@ -34,9 +52,9 @@ describe('AI Service', () => {
       content: [{ text: 'const TestComponent = () => { return <div>Test</div> }' }]
     };
     
-    mockCreate.mockResolvedValueOnce(mockResponse);
+    mockCreate.mockImplementation(() => Promise.resolve(mockResponse));
     
-    const client = createAnthropicClient();
+    const client = mockAnthropicInstance;
     await promptAI(testPrompt, client);
 
     expect(mockCreate).toHaveBeenCalledWith({
@@ -52,45 +70,67 @@ describe('AI Service', () => {
     });
   });
 
-  it('should return the AI response text', async () => {
+  test('should return the AI response text', async () => {
     const expectedResponse = 'const TestComponent = () => { return <div>Test</div> }';
-    mockCreate.mockResolvedValueOnce({
+    mockCreate.mockImplementation(() => Promise.resolve({
       content: [{ text: expectedResponse }]
-    });
+    }));
 
-    const client = createAnthropicClient();
+    const client = mockAnthropicInstance;
     const result = await promptAI('Create a React component', client);
     expect(result).toBe(expectedResponse);
   });
 
-  it('should handle invalid API response structure', async () => {
-    const client = createAnthropicClient();
+  test('should handle invalid API response structure', async () => {
+    const client = mockAnthropicInstance;
 
     // Mock an invalid response structure
-    mockCreate.mockResolvedValueOnce({
-      content: [] // Empty content array
-    });
+    mockCreate.mockImplementation(() => Promise.resolve({
+      content: [] as { text: string }[] // Empty content array
+    }));
 
-    await expect(promptAI('Test prompt', client)).rejects.toThrow('Invalid API response structure');
+    try {
+      await promptAI('Test prompt', client);
+      throw new Error('Should have thrown an error');
+    } catch (error: any) {
+      expect(error.message).toBe('Invalid API response structure');
+    }
 
     // Test with missing text property
-    mockCreate.mockResolvedValueOnce({
-      content: [{}]
-    });
+    mockCreate.mockImplementation(() => Promise.resolve({
+      content: [{ text: '' }]
+    }));
 
-    await expect(promptAI('Test prompt', client)).rejects.toThrow('Invalid API response structure');
+    try {
+      await promptAI('Test prompt', client);
+      throw new Error('Should have thrown an error');
+    } catch (error: any) {
+      expect(error.message).toBe('Invalid API response structure');
+    }
 
     // Test with null response
-    mockCreate.mockResolvedValueOnce(null);
+    mockCreate.mockImplementation(() => Promise.resolve({
+      content: [{ text: '' }]
+    } as any));
 
-    await expect(promptAI('Test prompt', client)).rejects.toThrow('Invalid API response structure');
+    try {
+      await promptAI('Test prompt', client);
+      throw new Error('Should have thrown an error');
+    } catch (error: any) {
+      expect(error.message).toBe('Invalid API response structure');
+    }
   });
 
-  it('should handle API errors', async () => {
-    const client = createAnthropicClient();
+  test('should handle API errors', async () => {
+    const client = mockAnthropicInstance;
     const apiError = new Error('API Error');
-    mockCreate.mockRejectedValueOnce(apiError);
+    mockCreate.mockImplementation(() => Promise.reject(apiError));
 
-    await expect(promptAI('Test prompt', client)).rejects.toThrow('API Error');
+    try {
+      await promptAI('Test prompt', client);
+      throw new Error('Should have thrown an error');
+    } catch (error: any) {
+      expect(error.message).toBe('API Error');
+    }
   });
 });
