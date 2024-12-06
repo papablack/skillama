@@ -105,12 +105,31 @@ export function traverseFilesSkill(app: Express) {
     app.post('/api/show-file', (req: any, res: any) => {
         try {
             const { filename, projectName } = req.body;
-            const filePath = path.join(outputDir, projectName, filename);
+
+            // Validate required parameters
+            if (!filename || !projectName) {
+                return res.status(400).json({
+                    error: 'Bad Request',
+                    details: 'Both filename and projectName are required'
+                });
+            }
+
+            // Ensure project directory exists
+            const projectDir = path.join(outputDir, projectName);
+            if (!fs.existsSync(projectDir)) {
+                return res.status(404).json({
+                    error: 'Project not found',
+                    details: `Project directory ${projectName} does not exist`
+                });
+            }
+
+            const filePath = path.join(projectDir, filename);
             
-            if (!fs.existsSync(filePath)) {
+            // Ensure the file exists and is within the project directory
+            if (!fs.existsSync(filePath) || !filePath.startsWith(projectDir)) {
                 return res.status(404).json({
                     error: 'File not found',
-                    details: `File ${filename} does not exist in ${outputDir}`
+                    details: `File ${filename} does not exist in project ${projectName}`
                 });
             }
 

@@ -168,24 +168,43 @@ describe('traverseFiles Skill', () => {
     });
 
     describe('POST /api/show-file', () => {
-        test('should return 404 when file does not exist', () => {
+        test('should return 404 when project directory does not exist', () => {
             mockExistsSync.mockImplementation(() => false);
-
+        
             mockReq.body = {
-                filename: 'nonexistent.txt',
-                projectName: 'test-project'
+                filename: 'test.txt',
+                projectName: 'nonexistent-project'
             };
-
+        
             traverseFilesSkill(app);
-
+        
             const routes = (app._router.stack as any[]).filter(layer => layer.route);
             const showFileRoute = routes.find(r => r.route.path === '/api/show-file');
             showFileRoute.route.stack[0].handle(mockReq, mockRes);
-
+        
             expect(statusMock).toHaveBeenCalledWith(404);
             expect(jsonMock).toHaveBeenCalledWith({
-                error: 'File not found',
-                details: expect.any(String)
+                error: 'Project not found',
+                details: 'Project directory nonexistent-project does not exist'
+            });
+        });
+        
+        test('should return 400 when required parameters are missing', () => {
+            mockReq.body = {
+                filename: 'test.txt'
+                // missing projectName
+            };
+        
+            traverseFilesSkill(app);
+        
+            const routes = (app._router.stack as any[]).filter(layer => layer.route);
+            const showFileRoute = routes.find(r => r.route.path === '/api/show-file');
+            showFileRoute.route.stack[0].handle(mockReq, mockRes);
+        
+            expect(statusMock).toHaveBeenCalledWith(400);
+            expect(jsonMock).toHaveBeenCalledWith({
+                error: 'Bad Request',
+                details: 'Both filename and projectName are required'
             });
         });
 
