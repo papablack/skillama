@@ -4,6 +4,7 @@ import httpRoutes from '../routing/routes';
 import { TheAppModule } from "../app/app.module";
 
 export interface IAppModuleOpts extends IAppConfig { 
+    tunneler_name: string
 }
 
 const configHelper = new ConfigHelper();
@@ -16,6 +17,7 @@ function config(): IAppModuleOpts
         port: parseInt(configHelper.get('PORT')) || 3000,              
         pub_dir: configHelper.get('PUBLIC_DIR'),                  
         http_routes: httpRoutes,
+        tunneler_name: configHelper.get('TUNNELER_NAME')
     };
 }
 

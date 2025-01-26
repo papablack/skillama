@@ -13,9 +13,6 @@ const allEnvData = {
   ...localEnvData.parsed
 }
 
-console.log({allEnvData})
-
-
 module.exports = RWSWebpackWrapper({
   dev: parseInt(allEnvData.DEV) === 1,  
   tsConfigPath: executionDir + '/tsconfig.json',

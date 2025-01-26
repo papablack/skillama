@@ -12,7 +12,7 @@ interface FileNode extends FileStats {
 const outputDir: string = path.resolve(process.cwd(), 'generated');
 
 // @ApiTags('files')
-@Controller('files')
+@Controller('traverse')
 export class TraverseController {
   private buildFileTree(dirPath: string, visited = new Set<string>()): FileNode[] {
     const normalizedPath = path.normalize(dirPath);
