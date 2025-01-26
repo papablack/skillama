@@ -6,11 +6,6 @@ export interface TunnelOptions {
   skip_tunnel_warning?: boolean
 }
 
-export interface TunnelInstance {
-  url: string;
-  on(event: 'close' | 'error', callback: (err?: Error) => void): void;
-}
-
 export interface FileStats {
   name: string;
   path: string;

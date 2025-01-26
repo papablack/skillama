@@ -11,6 +11,7 @@ interface FileNode extends FileStats {
 
 const outputDir: string = path.resolve(process.cwd(), 'generated');
 
+// @ApiTags('files')
 @Controller('files')
 export class TraverseController {
   private buildFileTree(dirPath: string, visited = new Set<string>()): FileNode[] {
@@ -70,6 +71,8 @@ export class TraverseController {
     return result;
   }
 
+  // @ApiOperation({ summary: 'Get file list' })
+  // @ApiResponse({ files: [], treeView: '', message: null })
   @RWSRoute('list_files')
   async listFiles(@Query('projectName') projectName: string): Promise<{ files: FileNode[], treeView: string, message?: string }> 
   {
@@ -107,6 +110,14 @@ export class TraverseController {
     }
   }
 
+  // @ApiOperation({ summary: 'Get file content' })
+  // @ApiResponse({ 
+  //   filename: 'filename.example.ts',
+  //   path: '/path/to/file',
+  //   content: 'export class FileContentExample {}',
+  //   size: 0,
+  //   created: new Date(),
+  //   modified: new Date() })
   @RWSRoute('show_file')
   async showFile(
     @Body() body: { filename: string; projectName: string }

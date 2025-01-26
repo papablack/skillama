@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { AppController } from '../controllers/app.controller';
 import { TraverseController } from '../controllers/traverse.controller';
 
+import { TunnelerService } from '../services/tunneler.service';
+
 import { NestModuleData } from '@rws-framework/server/exec/src/application/cli.module';
 
 
@@ -14,7 +16,11 @@ export class TheAppModule {
       module: TheAppModule,
       imports: processedImports,
       controllers:[
-        AppController
+        AppController,
+        TraverseController
+      ],
+      providers: [
+        TunnelerService
       ]
     }
   }

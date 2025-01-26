@@ -8,11 +8,15 @@ import { promisify } from 'util';
 import { promptAI } from '../inc/ai';
 import { createGitHubRepo } from '../inc/github';
 
+
 const execAsync = promisify(exec);
 const outputDir: string = path.resolve(process.cwd(), 'generated');
 
+//@ApiTags('app')
 @Controller('app')
 export class AppController {
+  // @ApiOperation({ summary: 'Checks server status' })
+  // @ApiResponse({ status: 'OK', message: 'Server is running' })
   @RWSRoute('healthcheck')
   async healthCheck() {
     return { status: 'OK', message: 'Server is running' };
