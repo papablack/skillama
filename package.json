@@ -3,6 +3,7 @@
   "version": "1.0.1",
   "description": "AI Code Generation Server with Anthropic Claude",
   "main": "back/index.ts",
+  "private": true,
   "scripts": {
     "start": "bun ./back/src/index.ts",
     "node:start": "node ./back/dist/skillama.js",
@@ -10,7 +11,7 @@
     "front:build": "cd front && bun build",
     "front:watch": "cd front && bun watch"
   },
-  "devDependencies": {    
+  "devDependencies": {
     "tsc-watch": "^6.0.0",
     "typescript": "^5.0.0"
   },

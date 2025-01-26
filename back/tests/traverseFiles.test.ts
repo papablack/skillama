@@ -2,7 +2,7 @@ import { expect, test, describe, beforeEach, mock } from "bun:test";
 import express from 'express';
 import fs from 'fs';
 import path from 'path';
-import { traverseFilesSkill } from '../src/skills/traverseFiles';
+import { traverseFilesSkill } from '../.old.src/skills/traverseFiles';
 
 const MOCK_CWD = '/mnt/f/AI/CODE/skillama/back';
 process.cwd = () => MOCK_CWD;

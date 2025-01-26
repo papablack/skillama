@@ -4,14 +4,16 @@
   "description": "AI Code Generation Server with Anthropic Claude",
   "main": "index.ts",
   "scripts": {
-    "transpile": "bun build ./src/index.ts --target node --minify --format cjs --outfile ./dist/skillama.js",
-    "start": "bun index.ts",
-    "dev": "bun --watch index.ts",
-    "test": "bun test --preload ./tests/setup.ts",
-    "test:watch": "bun test --watch --preload ./tests/setup.ts"
+    "dev": "npm-run-all --parallel watch:transpile watch:run",
+    "watch:run": "nodemon \"./build/rws.server.js\" --watch \"./build\"",
+    "watch:transpile": "webpack --config webpack.config.js --watch",
+    "build": "webpack --config webpack.config.js --output-path ./build",
+    "cli": "webpack --config cli.webpack.config.js --output-path ./build && node build/rws.cli.js",
+    "server": "node build/rws.server.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.18.0",
+    "@rws-framework/server": "^3.6.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.18.3",
@@ -22,6 +24,7 @@
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
+    "@types/jsonwebtoken": "^9.0.8",
     "@types/localtunnel": "^2.0.4",
     "@types/supertest": "^6.0.2",
     "@types/uniqid": "^5.3.4",

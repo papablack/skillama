@@ -4,3 +4,12 @@ generated/*
 
 front/build
 front/public/js/*.map
+
+.env
+tmp/
+node_modules
+.rws.json
+frontend/public/js/*
+frontend/public/css/*
+rws-dev/
+.codegpt

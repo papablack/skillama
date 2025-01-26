@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "{{DOMAIN}}"
+      "url": "https://skillama.loca.lt"
     }
   ],
   "paths": {
@@ -60,12 +60,30 @@
       }
     },
     "/api/list-files": {
-      "get": {
-        "operationId": "listGeneratedFiles",
-        "summary": "List Generated Files",
+      "post": {
+        "operationId": "getFileContents",
+        "summary": "Show File Contents",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "projectName"
+                ],
+                "properties": {
+                  "projectName": {
+                    "type": "string"
+                  }              
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "List of files"
+            "description": "File contents"
           }
         }
       }
