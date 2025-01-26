@@ -11,13 +11,7 @@ const configHelper = new ConfigHelper();
 function config(): IAppModuleOpts
 {
     return {       
-        nest_module: TheAppModule,                
-        features: {
-            routing_enabled: true,
-            ws_enabled: true,
-            ssl: false,
-            auth: false
-        },
+        nest_module: TheAppModule,
         secret_key: configHelper.get('JWT_SECRET'),    
         port: parseInt(configHelper.get('PORT')) || 3000,              
         pub_dir: configHelper.get('PUBLIC_DIR'),                  
