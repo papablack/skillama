@@ -941,10 +941,17 @@
     pino-colada "^2.2.2"
     pino-pretty "^10.2.0"
 
-"@rws-framework/server@^3.6.7":
-  version "3.6.7"
-  resolved "https://registry.yarnpkg.com/@rws-framework/server/-/server-3.6.7.tgz#76a9953feebe1f577d7e78808bb40dcf2a876c88"
-  integrity sha512-plhui//1pOp5jFY21U+QTHpDQpAWO6yY+8Qxa94Ho7EdIgOw0D6e+qrwB6M0D9Vp7u5otXZoGn625OkbfX6B+w==
+"@rws-framework/openapi@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@rws-framework/openapi/-/openapi-0.0.2.tgz#bbd051a52da221902a6b6ce14d972ea2c11dc600"
+  integrity sha512-AVXGagnwL1hxDM6rFfRRiPryN35pgeZ0XsllJ56JucTwknOSAXyg++prIMH7aXtPODPnAq6zy3yedinNrZkJQw==
+  dependencies:
+    "@rws-framework/server" "^3.7.0"
+
+"@rws-framework/server@^3.7.0":
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/@rws-framework/server/-/server-3.7.0.tgz#5fb42ece53bb0328e0d18ce35f5371a9ce1081fc"
+  integrity sha512-f/0eWuAEFJIOFgy0fTNtQULHK2Ter/d1rRWFz1ZNqHc0y/HCCgV2SyiK84ZbQ0+RQxCc6pE6R1OpHuyMTTKvYg==
   dependencies:
     "@fastify/static" "7.0.0"
     "@langchain/community" "^0.2.27"
@@ -2137,9 +2144,9 @@ bufferutil@^4.0.7:
     node-gyp-build "^4.3.0"
 
 bun-types@^1.1.38:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/bun-types/-/bun-types-1.2.0.tgz#9eea34d993fec33f1e67737228e7d5620480a19d"
-  integrity sha512-KEaJxyZfbV/c4eyG0vyehDpYmBGreNiQbZIqvVHJwZ4BmeuWlNZ7EAzMN2Zcd7ailmS/tGVW0BgYbGf+lGEpWw==
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/bun-types/-/bun-types-1.2.1.tgz#b858acc4083ff2287021d4eb2a71b63fc6132d9f"
+  integrity sha512-p7bmXUWmrPWxhcbFVk7oUXM5jAGt94URaoa3qf4mz43MEhNAo/ot1urzBqctgvuq7y9YxkuN51u+/qm4BiIsHw==
   dependencies:
     "@types/node" "*"
     "@types/ws" "~8.5.10"

@@ -17,7 +17,7 @@ export class TunnelerService implements OnModuleInit, OnModuleDestroy {
     this.port = this.configService.get<number>('port');
     this.tunnelerName = this.configService.get<string>('tunneler_name');
     
-    this.tunnel = await this.startTunneling(this.port, this.tunnelerName);
+    // this.tunnel = await this.startTunneling(this.port, this.tunnelerName);
   }
 
   async onModuleDestroy() {

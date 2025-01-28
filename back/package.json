@@ -7,14 +7,14 @@
     "dev": "npm-run-all --parallel watch:transpile watch:run",
     "watch:run": "nodemon \"./build/rws.server.js\" --watch \"./build\"",
     "watch:transpile": "webpack --config webpack.config.js --watch",
-    "build": "webpack --config webpack.config.js --output-path ./build",
-    "cli": "webpack --config cli.webpack.config.js --output-path ./build && node build/rws.cli.js",
+    "build": "webpack --config webpack.config.js --output-path ./build",    
     "server": "node build/rws.server.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.18.0",
     "@nestjs/swagger": "^11.0.3",
-    "@rws-framework/server": "^3.6.7",
+    "@rws-framework/openapi": "^1.0.0",
+    "@rws-framework/server": "^3.7.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.18.3",

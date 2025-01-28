@@ -13,3 +13,5 @@ frontend/public/js/*
 frontend/public/css/*
 rws-dev/
 .codegpt
+
+.dev/

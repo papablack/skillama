@@ -37,7 +37,7 @@ module.exports = RWSWebpackWrapper({
     ]
   },
   rwsDefines: {
-    'process.env.TUNNELER_NAME': JSON.stringify(process.env.TUNNELER_NAME),
-    'process.env.OPENAPI_TEMPLATE': JSON.stringify(fs.readFileSync( path.resolve(__dirname, '..', 'back', 'docs', 'openapi.json'), 'utf-8')),
+    TUNNELER_NAME: process.env.TUNNELER_NAME,
+    OPENAPI_TEMPLATE: fs.readFileSync( path.resolve(__dirname, '..', 'back', 'docs', 'openapi.json'), 'utf-8'),
   }
 });

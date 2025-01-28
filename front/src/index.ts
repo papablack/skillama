@@ -3,6 +3,8 @@ import { RWSBrowserRouter  } from '@rws-framework/browser-router';
 import initComponents from './application/_initComponents';
 import './styles/main.scss';
 
+import backendRoutes from '../../back/src/routing/routes';
+
 import routes from './routing/routes';
 import notifierMethod from './_notifier';
 
@@ -24,7 +26,8 @@ async function initializeApp() {
     theClient.start({
         backendUrl: process.env.TUNNELER_NAME,
         partedDirUrlPrefix: '/js',
-        parted: false
+        parted: false,
+        backendRoutes
     });
 }
 

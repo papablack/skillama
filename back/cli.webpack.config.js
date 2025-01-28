@@ -1,11 +1,19 @@
 const path = require('path');
 
 const RWSWebpackWrapper = require('@rws-framework/server/cli.rws.webpack.config');
+const dotenv = require('dotenv');
 
 const executionDir = process.cwd();
+const envData = dotenv.config({ path: path.resolve(__dirname, '..', '.env') });
+const localEnvData = dotenv.config({ path: path.resolve(__dirname, '..', '.env.local') });
+
+const allEnvData = {
+  ...envData.parsed,
+  ...localEnvData.parsed
+}
 
 module.exports = RWSWebpackWrapper({
-  dev: parseInt(process.env.DEV) === 1,  
+  dev: parseInt(allEnvData.DEV) === 1,  
   tsConfigPath: executionDir + '/tsconfig.json',
   entry: `${executionDir}/src/cli.ts`,
   executionDir: executionDir,  
