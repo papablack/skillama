@@ -13,7 +13,7 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.18.0",
     "@nestjs/swagger": "^11.0.3",
-    "@rws-framework/openapi": "^1.0.0",
+    "@rws-framework/openapi": "^1.0.1",
     "@rws-framework/server": "^3.7.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",

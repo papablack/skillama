@@ -28,6 +28,7 @@ export const appRoutes: IHTTProute<IOpenApiRouteParams>[] = [
                 },
                 responses: {
                     200: {
+                        description: 'Proper response',
                         returnParams: {
                             message: {
                                 type: 'string'
@@ -41,6 +42,7 @@ export const appRoutes: IHTTProute<IOpenApiRouteParams>[] = [
                         }                        
                     },
                     400: {
+                        description: 'Bad payload error',
                         returnParams: {
                             statusCode: {
                                 type: 'number'
